@@ -33,6 +33,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 
         @Override
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
+            System.out.println("Start initialize");
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
             Path path = fsplit.getPath();
@@ -57,10 +58,12 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             } catch (EOFException ignored) {
             }
             input_idx.close();
+            System.out.println("End initialize");
         }
 
         @Override
         public boolean nextKeyValue() throws IOException, InterruptedException {
+            System.out.println("Start nextKeyValue");
             if (cur_doc >= ndocs)
                 return false;
 
@@ -79,6 +82,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             // Decode the bytes into a String
             cur_text = new Text(result.getBytes());
             cur_doc++;
+            System.out.println("End nextKeyValue");
             return true;
         }
 
