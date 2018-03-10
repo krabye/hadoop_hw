@@ -13,6 +13,8 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
+import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,22 @@ public class MyInputFormat extends FileInputFormat<NullWritable, BytesWritable>{
 
         for (FileStatus status: listStatus(context)) {
             System.out.println("Path " + status.getPath());
+
+            Path path = status.getPath();
+            Configuration conf = context.getConfiguration();
+            FileSystem fs = path.getFileSystem(conf);
+            FSDataInputStream input = fs.open(new Path(path.toString()+".idx"));
+//            BytesWritable value = new BytesWritable();
+//            input.readFully(0, value.getBytes());
+
+            DataInputStream idx = new DataInputStream(input);
+            try {
+                while (true)
+                    System.out.println(idx.readInt());
+            } catch (EOFException ignored) {
+                System.out.println("[EOF]");
+            }
+            idx.close();
 //            long split_size = getNumBytesPerSplit(context.getConfiguration());
 //            long flen = status.getLen();
 //            Path path = status.getPath();
