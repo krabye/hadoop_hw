@@ -34,6 +34,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
         @Override
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
 //            System.out.println("Start initialize");
+            value.setCapacity(Integer.MAX_VALUE);
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
             Path path = fsplit.getPath();
