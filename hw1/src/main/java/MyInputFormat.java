@@ -45,7 +45,7 @@ public class MyInputFormat extends FileInputFormat<NullWritable, BytesWritable>{
                 while (true) {
                     int s = 0;
                     for (int i = 0; i < 4; ++i)
-                        s = (s << 8) + idx.readByte();
+                        s += idx.readByte() << (i*8);
 
                     System.out.println(s);
                 }
