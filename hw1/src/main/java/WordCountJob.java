@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WordCountJob extends Configured implements Tool {
-    public static class WordCountMapper extends Mapper<LongWritable, Text, Text, LongWritable> {
+    public static class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         Pattern pattern = Pattern.compile("\\p{L}+");
 
         @Override
@@ -28,7 +28,7 @@ public class WordCountJob extends Configured implements Tool {
             Matcher matcher = pattern.matcher(line);
             // split by space symbols (space, tab, ...)
             while (matcher.find()) {
-                context.write(new Text(matcher.group().toLowerCase()), key);
+                context.write(new Text(matcher.group().toLowerCase()), new IntWritable((int)key.get()));
             }
         }
     }
