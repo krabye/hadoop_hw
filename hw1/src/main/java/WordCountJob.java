@@ -13,29 +13,34 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WordCountJob extends Configured implements Tool {
-    public static class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
-        static final IntWritable one = new IntWritable(1);
+    public static class WordCountMapper extends Mapper<LongWritable, Text, Text, LongWritable> {
+        Pattern pattern = Pattern.compile("\\p{L}+");
+
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
+            Matcher matcher = pattern.matcher(line);
             // split by space symbols (space, tab, ...)
-            for(String word: line.split("\\s"))
-                context.write(new Text(word), one);
+            while (matcher.find()) {
+                context.write(new Text(matcher.group().toLowerCase()), key);
+            }
         }
     }
 
-    public static class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class WordCountReducer extends Reducer<Text, LongWritable, Text, IntWritable> {
         @Override
-        protected void reduce(Text word, Iterable<IntWritable> nums, Context context) throws IOException, InterruptedException {
+        protected void reduce(Text word, Iterable<LongWritable> nums, Context context) throws IOException, InterruptedException {
             int sum = 0;
-            for(IntWritable i: nums) {
-                sum += i.get();
-            }
+            HashSet<LongWritable> hs = new HashSet<>((Collection<? extends LongWritable>) nums);
 
             // produce pairs of "word" <-> amount
-            context.write(word, new IntWritable(sum));
+            context.write(word, new IntWritable(hs.size()));
         }
     }
 
