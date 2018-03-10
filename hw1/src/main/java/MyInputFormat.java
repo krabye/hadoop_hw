@@ -34,8 +34,8 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 
         @Override
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
-            System.out.println("capacity"+max_doc_size);
-            value.setCapacity(max_doc_size);
+//            System.out.println("capacity"+max_doc_size);
+            value.setCapacity(10000000);
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
             Path path = fsplit.getPath();
