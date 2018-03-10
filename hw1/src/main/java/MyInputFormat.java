@@ -20,6 +20,7 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
 public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
+    private int max_doc_size = 0;
 
     public class MyRecordReader extends RecordReader<LongWritable, Text> {
         FSDataInputStream input;
@@ -34,7 +35,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
         @Override
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
 //            System.out.println("Start initialize");
-            value.setCapacity(Integer.MAX_VALUE);
+            value.setCapacity(max_doc_size);
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
             Path path = fsplit.getPath();
@@ -137,6 +138,9 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                     long s = 0;
                     for (int i = 0; i < 4; ++i)
                         s += idx.readByte() << (i*8);
+
+                    if (s > max_doc_size)
+                        max_doc_size = (int)s;
 
                     if (cur_split_size + s <= split_size){
                         cur_split_size += s;
