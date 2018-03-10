@@ -69,8 +69,8 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             if (cur_doc >= ndocs)
                 return false;
 
-            IOUtils.readFully(input, value.getBytes(), (int)offset, docs_size.get(cur_doc));
-            offset += docs_size.get(cur_doc);
+            IOUtils.readFully(input, value.getBytes(), 0, docs_size.get(cur_doc));
+//            offset += docs_size.get(cur_doc);
             Inflater decompresser = new Inflater();
             decompresser.setInput(value.getBytes(), 0, docs_size.get(cur_doc));
             BytesWritable result = new BytesWritable();
