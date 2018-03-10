@@ -28,7 +28,7 @@ public class MyInputFormat extends FileInputFormat<NullWritable, BytesWritable>{
         List<InputSplit> splits = new ArrayList<>();
 
         for (FileStatus status: listStatus(context)) {
-            System.out.println(status.getPath());
+            System.out.println("Path " + status.getPath());
 //            long split_size = getNumBytesPerSplit(context.getConfiguration());
 //            long flen = status.getLen();
 //            Path path = status.getPath();
