@@ -139,7 +139,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                         cur_split_size = 0;
                     }
 
-                    System.out.println(s);
+//                    System.out.println(s);
                 }
             } catch (EOFException ignored) {
                 splits.add(new FileSplit(path, offset, cur_split_size, null));
