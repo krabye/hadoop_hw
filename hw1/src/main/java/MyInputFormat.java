@@ -71,7 +71,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 
             IOUtils.readFully(input, value.getBytes(), 0, docs_size.get(cur_doc));
             Inflater decompresser = new Inflater();
-            decompresser.setInput(value.getBytes(), (int)offset, docs_size.get(cur_doc));
+            decompresser.setInput(value.getBytes(), 0, docs_size.get(cur_doc));
             BytesWritable result = new BytesWritable();
             result.setCapacity(1000000*100);
             int resultLength = 0;
