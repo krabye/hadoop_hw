@@ -40,9 +40,15 @@ public class MyInputFormat extends FileInputFormat<NullWritable, BytesWritable>{
 //            input.readFully(0, value.getBytes());
 
             DataInputStream idx = new DataInputStream(input);
+
             try {
-                while (true)
-                    System.out.println(idx.readInt());
+                while (true) {
+                    int s = 0;
+                    for (int i = 0; i < 4; ++i)
+                        s = (s << 8) + idx.readByte();
+
+                    System.out.println(s);
+                }
             } catch (EOFException ignored) {
                 System.out.println("[EOF]");
             }
