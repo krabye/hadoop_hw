@@ -83,7 +83,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             decompresser.end();
 
             // Decode the bytes into a String
-            cur_text = new Text(result.getBytes());
+            cur_text = new Text(new String(result.getBytes(), 0, resultLength));
             cur_doc++;
 //            System.out.println("End nextKeyValue");
             return true;
