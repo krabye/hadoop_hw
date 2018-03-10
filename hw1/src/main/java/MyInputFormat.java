@@ -28,14 +28,14 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
         int cur_doc = 0;
         Text cur_text;
 
-        BytesWritable value = new BytesWritable();
+        byte[] value = new byte[max_doc_size];
         List<Integer> docs_size = new ArrayList<>();
         long offset = 0;
 
         @Override
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
 //            System.out.println("capacity"+max_doc_size);
-            value.setCapacity(1000000);
+//            value.setCapacity(1000000);
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
             Path path = fsplit.getPath();
@@ -69,22 +69,22 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             if (cur_doc >= ndocs)
                 return false;
 
-            IOUtils.readFully(input, value.getBytes(), 0, docs_size.get(cur_doc));
+            IOUtils.readFully(input, value, 0, docs_size.get(cur_doc));
 //            offset += docs_size.get(cur_doc);
             Inflater decompresser = new Inflater();
-            decompresser.setInput(value.getBytes(), 0, docs_size.get(cur_doc));
-            BytesWritable result = new BytesWritable();
-            result.setCapacity(1000000*100);
+            decompresser.setInput(value, 0, docs_size.get(cur_doc));
+            byte[] result = new byte[100*max_doc_size];
+//            result.setCapacity(1000000*100);
             int resultLength = 0;
             try {
-                resultLength = decompresser.inflate(result.getBytes());
+                resultLength = decompresser.inflate(result);
             } catch (DataFormatException e) {
                 e.printStackTrace();
             }
             decompresser.end();
 
             // Decode the bytes into a String
-            cur_text = new Text(new String(result.getBytes(), 0, resultLength));
+            cur_text = new Text(new String(result, 0, resultLength));
             cur_doc++;
 //            System.out.println("End nextKeyValue");
             return true;
