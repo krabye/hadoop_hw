@@ -35,7 +35,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
         @Override
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
 //            System.out.println("capacity"+max_doc_size);
-            value.setCapacity(10000000);
+            value.setCapacity(max_doc_size);
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
             Path path = fsplit.getPath();
@@ -73,6 +73,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             Inflater decompresser = new Inflater();
             decompresser.setInput(value.getBytes(), (int)offset, docs_size.get(cur_doc));
             BytesWritable result = new BytesWritable();
+            result.setCapacity(max_doc_size*100);
             int resultLength = 0;
             try {
                 resultLength = decompresser.inflate(result.getBytes());
