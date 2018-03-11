@@ -28,7 +28,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
         int cur_doc = 0;
         Text cur_text;
 
-        byte[] value = new byte[max_doc_size];
+        byte[] value;
         List<Integer> docs_size = new ArrayList<>();
         long offset = 0;
 
@@ -36,6 +36,9 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
 //            System.out.println("capacity"+max_doc_size);
 //            value.setCapacity(1000000);
+            value = new byte[max_doc_size];
+            if (max_doc_size == 0)
+                throw new IOException("MAX DOC SIZE is 0");
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
             Path path = fsplit.getPath();
