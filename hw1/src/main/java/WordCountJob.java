@@ -21,14 +21,19 @@ import java.util.regex.Pattern;
 public class WordCountJob extends Configured implements Tool {
     public static class WordCountMapper extends Mapper<LongWritable, Text, Text, LongWritable> {
         Pattern pattern = Pattern.compile("\\p{L}+");
+        static final LongWritable one = new LongWritable(1);
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             Matcher matcher = pattern.matcher(line);
             // split by space symbols (space, tab, ...)
+            HashSet<Text> hs = new HashSet<>();
             while (matcher.find()) {
-                context.write(new Text(matcher.group().toLowerCase()), key);
+                hs.add(new Text(matcher.group().toLowerCase()));
+            }
+            for (Text t: hs){
+                context.write(t, one);
             }
         }
     }
@@ -36,13 +41,12 @@ public class WordCountJob extends Configured implements Tool {
     public static class WordCountReducer extends Reducer<Text, LongWritable, Text, LongWritable> {
         @Override
         protected void reduce(Text word, Iterable<LongWritable> nums, Context context) throws IOException, InterruptedException {
-            int sum = 0;
-            HashSet<LongWritable> hs = new HashSet<>();
+            long count = 0;
             for (LongWritable i: nums)
-                hs.add(i);
+                count += i.get();
 
             // produce pairs of "word" <-> amount
-            context.write(word, new LongWritable(hs.size()));
+            context.write(word, new LongWritable(count));
         }
     }
 
