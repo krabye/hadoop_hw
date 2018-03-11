@@ -167,7 +167,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                     } else {
                         splits.add(new FileSplit(path, offset, cur_split_size, null));
                         offset += cur_split_size;
-                        cur_split_size = 0;
+                        cur_split_size = s;
                     }
 
 //                    System.out.println(s);
