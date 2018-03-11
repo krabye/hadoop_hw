@@ -53,6 +53,10 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                     for (int i = 0; i < 4; ++i)
                         s += input_idx.readByte() << (i*8);
 
+                    if (s < 0) {
+                        throw new IOException("Index < 0: " + s);
+                    }
+
                     if(s > max_doc_size)
                         max_doc_size = s;
 
@@ -151,6 +155,10 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                     int s = 0;
                     for (int i = 0; i < 4; ++i)
                         s += idx.readByte() << (i*8);
+
+                    if (s < 0) {
+                        throw new IOException("Index < 0: " + s);
+                    }
 
                     if (cur_split_size + s <= split_size){
                         cur_split_size += s;
