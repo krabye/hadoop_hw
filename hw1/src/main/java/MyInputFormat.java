@@ -43,6 +43,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             FileSystem fs = path.getFileSystem(conf);
             input = fs.open(path);
             offset = fsplit.getStart();
+            long end = offset + fsplit.getLength();
             input.seek(offset);
 
             DataInputStream input_idx = new DataInputStream(fs.open(new Path(path.toString()+".idx")));
@@ -65,6 +66,9 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                         ndocs++;
                     }
                     total_offset += s;
+
+                    if (total_offset >= end)
+                        break;
                 }
             } catch (EOFException ignored) {
             }
