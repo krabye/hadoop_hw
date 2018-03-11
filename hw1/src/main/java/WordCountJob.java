@@ -26,11 +26,11 @@ public class WordCountJob extends Configured implements Tool {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
-            Matcher matcher = pattern.matcher(line);
+            Matcher matcher = pattern.matcher(line.toLowerCase());
             // split by space symbols (space, tab, ...)
             HashSet<Text> hs = new HashSet<>();
             while (matcher.find()) {
-                hs.add(new Text(matcher.group().toLowerCase()));
+                hs.add(new Text(matcher.group()));
             }
             for (Text t: hs){
                 context.write(t, one);
