@@ -99,7 +99,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             decompresser.end();
 
             // Decode the bytes into a String
-            cur_text = new Text(new String(result, 0, resultLength, "UTF-16BE"));
+            cur_text = new Text(new String(result, 0, resultLength, "UTF-8"));
             cur_doc++;
             return true;
         }

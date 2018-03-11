@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class WordCountJob extends Configured implements Tool {
     public static class WordCountMapper extends Mapper<LongWritable, Text, Text, LongWritable> {
-        Pattern pattern = Pattern.compile("\\p{L}+");
+        Pattern pattern = Pattern.compile("[\\p{L}" + String.valueOf(((char) 775)) + "]+");
         static final LongWritable one = new LongWritable(1);
 
         @Override
