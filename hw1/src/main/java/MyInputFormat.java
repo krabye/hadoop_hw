@@ -82,7 +82,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 
         @Override
         public boolean nextKeyValue() throws IOException, InterruptedException {
-//            System.out.println("Start nextKeyValue");
+            System.out.println("Start nextKeyValue");
             if (cur_doc >= ndocs)
                 return false;
 
