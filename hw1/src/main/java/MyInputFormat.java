@@ -23,19 +23,22 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 
     public class MyRecordReader extends RecordReader<LongWritable, Text> {
         FSDataInputStream input;
-        int ndocs = 0;
-        int cur_doc = 0;
+        int ndocs;
+        int cur_doc;
         Text cur_text;
-        int max_doc_size = 0;
+        int max_doc_size;
 
         byte[] value;
-        List<Integer> docs_size = new ArrayList<>();
-        long offset = 0;
+        List<Integer> docs_size;
+        long offset;
 
         @Override
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
-//            System.out.println("capacity"+max_doc_size);
-//            value.setCapacity(1000000);
+            docs_size = new ArrayList<>();
+            ndocs = 0;
+            cur_doc = 0;
+            max_doc_size = 0;
+            offset = 0;
 
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
