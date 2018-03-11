@@ -77,12 +77,12 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             value = new byte[max_doc_size+1];
             if (max_doc_size == 0)
                 throw new IOException("MAX DOC SIZE is 0");
-//            System.out.println("End initialize");
+            System.out.println("initialize, ndocs: " + ndocs);
         }
 
         @Override
         public boolean nextKeyValue() throws IOException, InterruptedException {
-            System.out.println("Start nextKeyValue");
+            System.out.println("Nextkey, cur_doc: " + cur_doc + ", ndocs: " + ndocs);
             if (cur_doc >= ndocs)
                 return false;
 
