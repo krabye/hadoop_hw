@@ -20,7 +20,7 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
 public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
-    private int max_doc_size = 0;
+    private static int max_doc_size = 0;
 
     public class MyRecordReader extends RecordReader<LongWritable, Text> {
         FSDataInputStream input;
@@ -140,7 +140,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 
             try {
                 while (true) {
-                    long s = 0;
+                    int s = 0;
                     for (int i = 0; i < 4; ++i)
                         s += idx.readByte() << (i*8);
 
