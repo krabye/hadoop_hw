@@ -154,9 +154,8 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                 while (true) {
                     long s = 0;
                     for (int i = 0; i < 4; i++) {
-                        long tmp = idx.readByte() << (i * 8);
-                        System.out.println("tmp"+i+": "+tmp);
-                        s += tmp;
+//                        System.out.println("tmp"+i+": "+tmp);
+                        s += idx.readUnsignedByte() << (i * 8);;
                     }
 
                     if (s < 0) {
