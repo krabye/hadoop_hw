@@ -56,10 +56,11 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                     if(s > max_doc_size)
                         max_doc_size = s;
 
-                    if (total_offset >= offset)
+                    if (total_offset >= offset) {
                         docs_size.add(s);
+                        ndocs++;
+                    }
                     total_offset += s;
-                    ndocs++;
                 }
             } catch (EOFException ignored) {
             }
