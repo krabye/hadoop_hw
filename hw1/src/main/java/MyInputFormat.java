@@ -141,7 +141,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
     @Override
     public RecordReader<LongWritable, Text> createRecordReader(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
         MyRecordReader reader = new MyRecordReader();
-//        reader.initialize(split, context);
+        reader.initialize(split, context);
         return reader;
     }
 
