@@ -20,13 +20,13 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
 public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
-    private static int max_doc_size = 0;
 
     public class MyRecordReader extends RecordReader<LongWritable, Text> {
         FSDataInputStream input;
         int ndocs = 0;
         int cur_doc = 0;
         Text cur_text;
+        int max_doc_size = 0;
 
         byte[] value;
         List<Integer> docs_size = new ArrayList<>();
@@ -36,9 +36,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
         public void initialize(InputSplit split, TaskAttemptContext context) throws IOException, InterruptedException {
 //            System.out.println("capacity"+max_doc_size);
 //            value.setCapacity(1000000);
-            value = new byte[max_doc_size];
-            if (max_doc_size == 0)
-                throw new IOException("MAX DOC SIZE is 0");
+
             Configuration conf = context.getConfiguration();
             FileSplit fsplit = (FileSplit)split;
             Path path = fsplit.getPath();
@@ -55,6 +53,9 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                     for (int i = 0; i < 4; ++i)
                         s += input_idx.readByte() << (i*8);
 
+                    if(s > max_doc_size)
+                        max_doc_size = s;
+
                     if (total_offset >= offset)
                         docs_size.add(s);
                     total_offset += s;
@@ -63,6 +64,10 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             } catch (EOFException ignored) {
             }
             input_idx.close();
+
+            value = new byte[max_doc_size];
+            if (max_doc_size == 0)
+                throw new IOException("MAX DOC SIZE is 0");
 //            System.out.println("End initialize");
         }
 
@@ -143,9 +148,6 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                     int s = 0;
                     for (int i = 0; i < 4; ++i)
                         s += idx.readByte() << (i*8);
-
-                    if (s > max_doc_size)
-                        max_doc_size = (int)s;
 
                     if (cur_split_size + s <= split_size){
                         cur_split_size += s;
