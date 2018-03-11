@@ -153,7 +153,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             try {
                 while (true) {
                     long s = 0;
-                    for (int i = 0; i < 4; ++i)
+                    for (int i = 0; i < 4; i++)
                         s += idx.readByte() << (i*8);
 
                     if (s < 0) {
