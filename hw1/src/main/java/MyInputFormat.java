@@ -179,6 +179,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                         offset += cur_split_size;
                         cur_split_size = s;
                         System.out.println("split ndocs: " + ndocs);
+                        System.out.println("offset: "+offset+", split_size: "+cur_split_size);
                         ndocs = 0;
                     }
 

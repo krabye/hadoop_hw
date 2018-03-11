@@ -37,7 +37,9 @@ public class WordCountJob extends Configured implements Tool {
         @Override
         protected void reduce(Text word, Iterable<LongWritable> nums, Context context) throws IOException, InterruptedException {
             int sum = 0;
-            HashSet<LongWritable> hs = new HashSet<>((Collection<? extends LongWritable>) nums);
+            HashSet<LongWritable> hs = new HashSet<>();
+            for (LongWritable i: nums)
+                hs.add(i);
 
             // produce pairs of "word" <-> amount
             context.write(word, new LongWritable(hs.size()));
