@@ -153,6 +153,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             long split_size = getNumBytesPerSplit(conf);
             long cur_split_size = 0;
             long offset = 0;
+            long ndocs = 0;
 
             try {
                 while (true) {
@@ -168,16 +169,20 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 
                     if (cur_split_size + s <= split_size){
                         cur_split_size += s;
+                        ndocs++;
                     } else {
                         splits.add(new FileSplit(path, offset, cur_split_size, null));
                         offset += cur_split_size;
                         cur_split_size = s;
+                        System.out.println("split ndocs: " + ndocs);
+                        ndocs = 0;
                     }
 
 //                    System.out.println(s);
                 }
             } catch (EOFException ignored) {
                 splits.add(new FileSplit(path, offset, cur_split_size, null));
+                System.out.println("split ndocs: " + ndocs);
             }
             idx.close();
 //            long split_size = getNumBytesPerSplit(context.getConfiguration());
