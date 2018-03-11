@@ -33,14 +33,14 @@ public class WordCountJob extends Configured implements Tool {
         }
     }
 
-    public static class WordCountReducer extends Reducer<Text, LongWritable, Text, IntWritable> {
+    public static class WordCountReducer extends Reducer<Text, LongWritable, Text, LongWritable> {
         @Override
         protected void reduce(Text word, Iterable<LongWritable> nums, Context context) throws IOException, InterruptedException {
             int sum = 0;
             HashSet<LongWritable> hs = new HashSet<>((Collection<? extends LongWritable>) nums);
 
             // produce pairs of "word" <-> amount
-            context.write(word, new IntWritable(hs.size()));
+            context.write(word, new LongWritable(hs.size()));
         }
     }
 
@@ -59,7 +59,7 @@ public class WordCountJob extends Configured implements Tool {
         job.setReducerClass(WordCountReducer.class);
 
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(LongWritable.class);
 
         return job;
     }
