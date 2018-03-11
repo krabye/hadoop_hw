@@ -51,7 +51,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                 while (true) {
                     int s = 0;
                     for (int i = 0; i < 4; ++i)
-                        s += input_idx.readByte() << (i*8);
+                        s += input_idx.readUnsignedByte() << (i*8);
 
                     if (s < 0) {
                         throw new IOException("Index < 0: " + s);
