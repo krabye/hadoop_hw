@@ -81,7 +81,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             IOUtils.readFully(input, value, 0, docs_size.get(cur_doc));
 //            offset += docs_size.get(cur_doc);
             Inflater decompresser = new Inflater();
-            if (docs_size.get(cur_doc) > max_doc_size)
+            if (docs_size.get(cur_doc) > value.length)
                 throw new IOException("cur doc size greater max doc size");
             decompresser.setInput(value, 0, docs_size.get(cur_doc));
             byte[] result = new byte[100*max_doc_size];
