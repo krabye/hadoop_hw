@@ -15,7 +15,6 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
@@ -112,8 +111,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             decompresser.end();
 
             // Decode the bytes into a String
-//            cur_text = new Text(new String(result, 0, resultLength));
-            cur_text = new Text(Arrays.toString(result));
+            cur_text = new Text(new String(result, 0, resultLength, "UTF-8"));
             cur_doc++;
 //            System.out.println("End nextKeyValue");
             return true;
