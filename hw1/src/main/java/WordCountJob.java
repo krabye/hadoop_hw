@@ -27,7 +27,6 @@ public class WordCountJob extends Configured implements Tool {
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String line = value.toString();
             Matcher matcher = pattern.matcher(line.toLowerCase());
-            // split by space symbols (space, tab, ...)
             HashSet<Text> hs = new HashSet<>();
             while (matcher.find()) {
                 hs.add(new Text(matcher.group()));
@@ -45,7 +44,6 @@ public class WordCountJob extends Configured implements Tool {
             for (LongWritable i: nums)
                 count += i.get();
 
-            // produce pairs of "word" <-> amount
             context.write(word, new LongWritable(count));
         }
     }
@@ -55,7 +53,6 @@ public class WordCountJob extends Configured implements Tool {
         job.setJarByClass(WordCountJob.class);
         job.setJobName(WordCountJob.class.getCanonicalName());
 
-        // will use traditional TextInputFormat to split line-by-line
         job.setInputFormatClass(MyInputFormat.class);
         FileInputFormat.addInputPath(job, new Path(input));
         FileOutputFormat.setOutputPath(job, new Path(output));
