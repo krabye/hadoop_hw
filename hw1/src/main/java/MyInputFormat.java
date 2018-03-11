@@ -46,6 +46,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             long end = offset + fsplit.getLength();
             input.seek(offset);
 
+            System.out.println("offset: "+offset+" , end: "+end);
             DataInputStream input_idx = new DataInputStream(fs.open(new Path(path.toString()+".idx")));
             try {
                 long total_offset = 0;
@@ -82,7 +83,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
 
         @Override
         public boolean nextKeyValue() throws IOException, InterruptedException {
-            System.out.println("Nextkey, cur_doc: " + cur_doc + ", ndocs: " + ndocs);
+//            System.out.println("Nextkey, cur_doc: " + cur_doc + ", ndocs: " + ndocs);
             if (cur_doc >= ndocs)
                 return false;
 
