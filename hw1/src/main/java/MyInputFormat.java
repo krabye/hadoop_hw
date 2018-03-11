@@ -86,7 +86,11 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
             if (cur_doc >= ndocs)
                 return false;
 
-            IOUtils.readFully(input, value, 0, docs_size.get(cur_doc));
+            try {
+                IOUtils.readFully(input, value, 0, docs_size.get(cur_doc));
+            } catch (IOException e){
+                return false;
+            }
 //            offset += docs_size.get(cur_doc);
             Inflater decompresser = new Inflater();
             if (docs_size.get(cur_doc) > value.length || docs_size.get(cur_doc) < 0)
@@ -185,6 +189,7 @@ public class MyInputFormat extends FileInputFormat<LongWritable, Text>{
                 System.out.println("split ndocs: " + ndocs);
             }
             idx.close();
+            input.close();
 //            long split_size = getNumBytesPerSplit(context.getConfiguration());
 //            long flen = status.getLen();
 //            Path path = status.getPath();
