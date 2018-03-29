@@ -45,8 +45,8 @@ public class TextPair implements WritableComparable<TextPair> {
 
     @Override
     public int compareTo(@Nonnull TextPair o) {
-        int cmp = host.compareTo(o.host);
-        return (cmp == 0) ? query.compareTo(o.query) : cmp;
+        int cmp = host.compareTo(o.getHost());
+        return (cmp == 0) ? query.compareTo(o.getQuery()) : cmp;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class TextPair implements WritableComparable<TextPair> {
     public boolean equals(Object obj) {
         if (obj instanceof TextPair) {
             TextPair tp = (TextPair) obj;
-            return host.equals(tp.host) && query.equals(tp.query);
+            return host.equals(tp.getHost()) && query.equals(tp.getQuery());
         }
         return false;
     }

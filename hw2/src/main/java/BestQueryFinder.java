@@ -57,7 +57,7 @@ public class BestQueryFinder extends Configured implements Tool {
 
         @Override
         public int compare(WritableComparable a, WritableComparable b) {
-            return ((TextPair) a).compareTo((TextPair) b);
+            return ((TextPair) a).getHost().compareTo(((TextPair) b).getHost());
         }
     }
 
