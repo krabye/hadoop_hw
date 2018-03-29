@@ -69,11 +69,11 @@ public class BestQueryFinder extends Configured implements Tool {
             String query = line.split("\t")[0];
             String host = line.split("\t")[1];
 
-            Pattern pattern = Pattern.compile("^(.*:)?/?/?([A-Za-z0-9\\-.]+)(:[0-9]+)?(.*)$");
+            Pattern pattern = Pattern.compile("^(([^:/?#]+):)?(/?/?([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
             Matcher matcher = pattern.matcher(host);
 
             if (matcher.find()) {
-                host = matcher.group(2);
+                host = matcher.group(4);
             } else {
                 return;
             }
